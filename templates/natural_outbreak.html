@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Natural Outbreak Scenario</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+
+<body>
+
+
+<!-- ==========================================
+     HEADER
+=========================================== -->
+
+<header>
+
+    <h1>
+        Natural Outbreak Scenario
+    </h1>
+
+    <p>
+        Enter Lake / Reservoir Parameters
+    </p>
+
+</header>
+
+
+
+<main class="container">
+
+
+    <!-- ======================================
+         NATURAL OUTBREAK INFORMATION
+    ======================================= -->
+
+    <section class="input-card">
+
+        <h2>
+            Natural Outbreak Information
+        </h2>
+
+
+        <!-- NATURAL LAKE -->
+
+        <label for="lake_name">
+            Natural Lake
+        </label>
+
+        <select id="lake_name">
+
+            <option value="">
+                -- Select Natural Lake --
+            </option>
+
+            <option value="Wular Lake">
+                Wular Lake
+            </option>
+
+        </select>
+
+
+
+        <!-- WATER LEVEL -->
+
+        <label for="water_level">
+            Water Level (m)
+        </label>
+
+        <input
+            type="number"
+            id="water_level"
+            value="25"
+            min="1"
+        >
+
+
+
+        <!-- OUTBURST WIDTH -->
+
+        <label for="outburst_width">
+            Outburst Width (m)
+        </label>
+
+        <input
+            type="number"
+            id="outburst_width"
+            value="15"
+            min="1"
+        >
+
+
+
+        <!-- OUTBURST TIME -->
+
+        <label for="outburst_time">
+            Outburst Formation Time (minutes)
+        </label>
+
+        <input
+            type="number"
+            id="outburst_time"
+            value="30"
+            min="1"
+        >
+
+
+
+        <!-- RUN BUTTON -->
+
+        <button
+            onclick="runNaturalOutbreakSimulation()"
+        >
+            Run Natural Outbreak Simulation
+        </button>
+
+
+    </section>
+
+
+</main>
+
+
+
+<script>
+
+
+// ==========================================
+// RUN NATURAL OUTBREAK SIMULATION
+// ==========================================
+
+async function runNaturalOutbreakSimulation() {
+
+
+    // ======================================
+    // GET LAKE NAME
+    // ======================================
+
+    const lakeName =
+        document.getElementById(
+            "lake_name"
+        ).value;
+
+
+
+    // ======================================
+    // GET WATER LEVEL
+    // ======================================
+
+    const waterLevel =
+        document.getElementById(
+            "water_level"
+        ).value;
+
+
+
+    // ======================================
+    // GET OUTBURST WIDTH
+    // ======================================
+
+    const outburstWidth =
+        document.getElementById(
+            "outburst_width"
+        ).value;
+
+
+
+    // ======================================
+    // GET OUTBURST TIME
+    // ======================================
+
+    const outburstTime =
+        document.getElementById(
+            "outburst_time"
+        ).value;
+
+
+
+    // ======================================
+    // CHECK LAKE
+    // ======================================
+
+    if (lakeName === "") {
+
+        alert(
+            "Please select a natural lake."
+        );
+
+        return;
+
+    }
+
+
+
+    // ======================================
+    // CHECK INPUTS
+    // ======================================
+
+    if (
+        waterLevel === "" ||
+        outburstWidth === "" ||
+        outburstTime === ""
+    ) {
+
+        alert(
+            "Please enter all the required values."
+        );
+
+        return;
+
+    }
+
+
+
+    try {
+
+
+        // ==================================
+        // SEND DATA TO FLASK
+        // ==================================
+
+        const response =
+            await fetch(
+                "/simulate",
+                {
+
+                    method: "POST",
+
+                    headers: {
+
+                        "Content-Type":
+                            "application/json"
+
+                    },
+
+
+                    body: JSON.stringify({
+
+                        scenario:
+                            "natural_outbreak",
+
+                        lake_name:
+                            lakeName,
+
+                        water_level:
+                            waterLevel,
+
+                        breach_width:
+                            outburstWidth,
+
+                        breach_time:
+                            outburstTime
+
+                    })
+
+                }
+            );
+
+
+
+        // ==================================
+        // GET SERVER RESPONSE
+        // ==================================
+
+        const data =
+            await response.json();
+
+
+
+        // ==================================
+        // CHECK ERROR
+        // ==================================
+
+        if (!data.success) {
+
+            alert(
+                data.error
+            );
+
+            return;
+
+        }
+
+
+
+        // ==================================
+        // GET SIMULATION RESULT
+        // ==================================
+
+        const result =
+            data.result;
+
+
+
+        // ==================================
+        // SAVE RESULT
+        // ==================================
+
+        sessionStorage.setItem(
+
+            "simulationResult",
+
+            JSON.stringify(
+                result
+            )
+
+        );
+
+
+
+        // ==================================
+        // GO TO DASHBOARD
+        // ==================================
+
+        window.location.href =
+            "/dashboard";
+
+
+    }
+
+
+    catch (error) {
+
+
+        console.error(
+            error
+        );
+
+
+        alert(
+            "Error connecting to server."
+        );
+
+
+    }
+
+}
+
+
+</script>
+
+
+</body>
+
+</html>

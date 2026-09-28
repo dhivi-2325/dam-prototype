@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Dam Break Scenario</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+
+<body>
+
+
+<!-- ==========================================
+     HEADER
+=========================================== -->
+
+<header>
+
+    <h1>
+        Dam Break Scenario
+    </h1>
+
+    <p>
+        Enter Dam and Break Parameters
+    </p>
+
+</header>
+
+
+
+<main class="container">
+
+
+    <!-- ======================================
+         DAM INFORMATION
+    ======================================= -->
+
+    <section class="input-card">
+
+        <h2>
+            Dam Break Information
+        </h2>
+
+
+        <!-- DAM NAME -->
+
+        <label for="dam_name">
+            Dam Name
+        </label>
+
+        <select id="dam_name">
+
+            <option value="">
+                -- Select Dam --
+            </option>
+
+            <option value="Mettur Dam">
+                Mettur Dam
+            </option>
+
+        </select>
+
+
+
+        <!-- DAM HEIGHT -->
+
+        <label for="dam_height">
+            Dam Height (m)
+        </label>
+
+        <input
+            type="number"
+            id="dam_height"
+            value="30"
+            min="1"
+        >
+
+
+
+        <!-- WATER LEVEL -->
+
+        <label for="water_level">
+            Water Level (m)
+        </label>
+
+        <input
+            type="number"
+            id="water_level"
+            value="25"
+            min="1"
+        >
+
+
+
+        <!-- BREAK WIDTH -->
+
+        <label for="breach_width">
+            Break Width (m)
+        </label>
+
+        <input
+            type="number"
+            id="breach_width"
+            value="15"
+            min="1"
+        >
+
+
+
+        <!-- BREAK FORMATION TIME -->
+
+        <label for="breach_time">
+            Break Formation Time (minutes)
+        </label>
+
+        <input
+            type="number"
+            id="breach_time"
+            value="30"
+            min="1"
+        >
+
+
+
+        <!-- RUN SIMULATION -->
+
+        <button
+            onclick="runDamBreachSimulation()"
+        >
+            Run Dam Break Simulation
+        </button>
+
+
+    </section>
+
+
+</main>
+
+
+
+<script>
+
+
+// ==========================================
+// RUN DAM BREAK SIMULATION
+// ==========================================
+
+async function runDamBreachSimulation() {
+
+
+    // ======================================
+    // GET DAM NAME
+    // ======================================
+
+    const damName =
+        document.getElementById(
+            "dam_name"
+        ).value;
+
+
+
+    // ======================================
+    // GET DAM HEIGHT
+    // ======================================
+
+    const damHeight =
+        document.getElementById(
+            "dam_height"
+        ).value;
+
+
+
+    // ======================================
+    // GET WATER LEVEL
+    // ======================================
+
+    const waterLevel =
+        document.getElementById(
+            "water_level"
+        ).value;
+
+
+
+    // ======================================
+    // GET BREAK WIDTH
+    // ======================================
+
+    const breachWidth =
+        document.getElementById(
+            "breach_width"
+        ).value;
+
+
+
+    // ======================================
+    // GET BREAK TIME
+    // ======================================
+
+    const breachTime =
+        document.getElementById(
+            "breach_time"
+        ).value;
+
+
+
+    // ======================================
+    // CHECK DAM
+    // ======================================
+
+    if (damName === "") {
+
+        alert(
+            "Please select a dam."
+        );
+
+        return;
+
+    }
+
+
+
+    // ======================================
+    // CHECK INPUTS
+    // ======================================
+
+    if (
+        damHeight === "" ||
+        waterLevel === "" ||
+        breachWidth === "" ||
+        breachTime === ""
+    ) {
+
+        alert(
+            "Please enter all the required values."
+        );
+
+        return;
+
+    }
+
+
+
+    try {
+
+
+        // ==================================
+        // SEND DATA TO FLASK
+        // ==================================
+
+        const response =
+            await fetch(
+                "/simulate",
+                {
+
+                    method: "POST",
+
+                    headers: {
+
+                        "Content-Type":
+                            "application/json"
+
+                    },
+
+
+                    body: JSON.stringify({
+
+                        /*
+                         * IMPORTANT:
+                         * Keep this as "dam_breach"
+                         * because app.py expects this value.
+                         */
+
+                        scenario:
+                            "dam_breach",
+
+
+                        dam_name:
+                            damName,
+
+
+                        dam_height:
+                            damHeight,
+
+
+                        water_level:
+                            waterLevel,
+
+
+                        breach_width:
+                            breachWidth,
+
+
+                        breach_time:
+                            breachTime
+
+                    })
+
+                }
+            );
+
+
+
+        // ==================================
+        // GET RESPONSE
+        // ==================================
+
+        const data =
+            await response.json();
+
+
+
+        // ==================================
+        // CHECK SERVER ERROR
+        // ==================================
+
+        if (!data.success) {
+
+            alert(
+                data.error
+            );
+
+            return;
+
+        }
+
+
+
+        // ==================================
+        // GET RESULT
+        // ==================================
+
+        const result =
+            data.result;
+
+
+
+        // ==================================
+        // CHANGE DASHBOARD DISPLAY NAME
+        // ==================================
+
+        result.scenario =
+            "Dam Break";
+
+
+
+        // ==================================
+        // SAVE RESULT FOR DASHBOARD
+        // ==================================
+
+        sessionStorage.setItem(
+
+            "simulationResult",
+
+            JSON.stringify(
+                result
+            )
+
+        );
+
+
+
+        // ==================================
+        // OPEN DASHBOARD
+        // ==================================
+
+        window.location.href =
+            "/dashboard";
+
+
+    }
+
+
+    catch (error) {
+
+
+        console.error(
+            error
+        );
+
+
+        alert(
+            "Error connecting to server."
+        );
+
+
+    }
+
+}
+
+
+</script>
+
+
+</body>
+
+</html>

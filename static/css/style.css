@@ -1,3 +1,7 @@
+/* ===================================
+   GENERAL
+=================================== */
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -6,34 +10,194 @@
 
 
 body {
-
     font-family: Arial, sans-serif;
 
     background: #f3f4f6;
 
     color: #111827;
+
+    min-height: 100vh;
 }
 
 
-header {
+/* ===================================
+   HEADER
+=================================== */
 
+header {
     background: #1e3a8a;
 
     color: white;
 
     text-align: center;
 
-    padding: 30px;
+    padding: 40px 20px;
 }
 
 
 header h1 {
+    font-size: 38px;
 
-    font-size: 32px;
-
-    margin-bottom: 8px;
+    margin-bottom: 10px;
 }
 
+
+header p {
+    font-size: 22px;
+}
+
+
+/* ===================================
+   HOME PAGE
+=================================== */
+
+.home-container {
+
+    min-height: calc(100vh - 150px);
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    padding: 40px 20px;
+}
+
+
+/* ===================================
+   HOME PAGE CARD
+=================================== */
+
+.welcome-card {
+
+    width: 100%;
+
+    max-width: 550px;
+
+    background: white;
+
+    padding: 40px;
+
+    border-radius: 15px;
+
+    box-shadow:
+        0 5px 20px rgba(0, 0, 0, 0.10);
+
+    text-align: center;
+}
+
+
+.welcome-card h2 {
+
+    font-size: 28px;
+
+    color: #1e3a8a;
+
+    margin-bottom: 12px;
+}
+
+
+.description {
+
+    color: #6b7280;
+
+    font-size: 16px;
+
+    margin-bottom: 30px;
+}
+
+
+/* ===================================
+   HOME PAGE LABEL
+=================================== */
+
+.welcome-card label {
+
+    display: block;
+
+    text-align: left;
+
+    font-weight: bold;
+
+    margin-bottom: 8px;
+
+    color: #111827;
+}
+
+
+/* ===================================
+   HOME PAGE DROPDOWN
+=================================== */
+
+.welcome-card select {
+
+    width: 100%;
+
+    padding: 13px;
+
+    border: 1px solid #d1d5db;
+
+    border-radius: 8px;
+
+    font-size: 16px;
+
+    background: white;
+
+    color: #111827;
+
+    cursor: pointer;
+}
+
+
+.welcome-card select:focus {
+
+    outline: none;
+
+    border-color: #2563eb;
+
+    box-shadow:
+        0 0 0 2px rgba(37, 99, 235, 0.15);
+}
+
+
+/* ===================================
+   HOME PAGE BUTTON
+=================================== */
+
+.welcome-card button {
+
+    width: 100%;
+
+    margin-top: 25px;
+
+    padding: 14px;
+
+    background: #2563eb;
+
+    color: white;
+
+    border: none;
+
+    border-radius: 8px;
+
+    font-size: 17px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+
+.welcome-card button:hover {
+
+    background: #1d4ed8;
+}
+
+
+/* ===================================
+   NORMAL CONTAINER
+=================================== */
 
 .container {
 
@@ -45,53 +209,85 @@ header h1 {
 }
 
 
+/* ===================================
+   INPUT CARD
+=================================== */
+
 .input-card {
 
     background: white;
 
-    padding: 25px;
+    padding: 30px;
 
     border-radius: 12px;
 
     box-shadow:
-        0 3px 10px
-        rgba(0, 0, 0, 0.1);
+        0 3px 10px rgba(0, 0, 0, 0.10);
 }
 
 
 .input-card h2 {
 
     margin-bottom: 20px;
+
+    color: #1e3a8a;
 }
 
 
-label {
+/* ===================================
+   LABELS
+=================================== */
+
+.input-card label {
 
     display: block;
 
     margin-top: 15px;
 
     font-weight: bold;
+
+    color: #111827;
 }
 
 
-input {
+/* ===================================
+   INPUTS
+=================================== */
+
+.input-card input {
 
     width: 100%;
 
     padding: 12px;
 
-    margin-top: 5px;
+    margin-top: 6px;
 
     border: 1px solid #d1d5db;
 
     border-radius: 6px;
+
+    font-size: 16px;
 }
 
 
-button {
+.input-card input:focus {
 
-    margin-top: 20px;
+    outline: none;
+
+    border-color: #2563eb;
+
+    box-shadow:
+        0 0 0 2px rgba(37, 99, 235, 0.15);
+}
+
+
+/* ===================================
+   INPUT PAGE BUTTON
+=================================== */
+
+.input-card button {
+
+    margin-top: 25px;
 
     width: 100%;
 
@@ -103,19 +299,25 @@ button {
 
     border: none;
 
-    border-radius: 6px;
+    border-radius: 7px;
 
     font-size: 16px;
+
+    font-weight: bold;
 
     cursor: pointer;
 }
 
 
-button:hover {
+.input-card button:hover {
 
     background: #1d4ed8;
 }
 
+
+/* ===================================
+   RESULTS
+=================================== */
 
 .results {
 
@@ -128,10 +330,7 @@ button:hover {
     display: grid;
 
     grid-template-columns:
-        repeat(
-            auto-fit,
-            minmax(220px, 1fr)
-        );
+        repeat(auto-fit, minmax(220px, 1fr));
 
     gap: 20px;
 
@@ -150,8 +349,7 @@ button:hover {
     text-align: center;
 
     box-shadow:
-        0 3px 10px
-        rgba(0, 0, 0, 0.08);
+        0 3px 10px rgba(0, 0, 0, 0.08);
 }
 
 
@@ -164,6 +362,10 @@ button:hover {
     margin: 15px 0;
 }
 
+
+/* ===================================
+   MAP
+=================================== */
 
 .map-section {
 
@@ -184,4 +386,669 @@ button:hover {
     margin-top: 20px;
 
     border-radius: 8px;
+}
+
+
+/* ===================================
+   MOBILE
+=================================== */
+
+@media (max-width: 600px) {
+
+    header h1 {
+
+        font-size: 28px;
+    }
+
+
+    header p {
+
+        font-size: 17px;
+    }
+
+
+    .welcome-card {
+
+        padding: 25px;
+    }
+
+
+    .welcome-card h2 {
+
+        font-size: 24px;
+    }
+
+}
+/* ===================================
+   DASHBOARD
+=================================== */
+
+.results h2 {
+    color: #1e3a8a;
+    margin-bottom: 15px;
+}
+
+.card h3 {
+    font-size: 17px;
+    color: #374151;
+}
+
+.card p {
+    font-size: 28px;
+    font-weight: bold;
+    margin-top: 12px;
+}
+
+
+/* ===================================
+   RISK LEGEND
+=================================== */
+
+.risk-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+
+.risk-legend span {
+    padding: 10px 15px;
+    background: #f3f4f6;
+    border-radius: 6px;
+}
+
+
+/* ===================================
+   DASHBOARD BUTTON
+=================================== */
+
+.input-card button {
+    cursor: pointer;
+}
+
+
+/* ===================================
+   MAP
+=================================== */
+
+#map {
+    width: 100%;
+    height: 550px;
+    margin-top: 20px;
+    border-radius: 10px;
+}
+/* ==========================================
+   PROFESSIONAL DASHBOARD
+========================================== */
+
+.dashboard-header {
+    background: #1e3a8a;
+    color: white;
+    text-align: left;
+    padding: 28px 5%;
+}
+
+.dashboard-header h1 {
+    font-size: 32px;
+    margin-bottom: 6px;
+}
+
+.dashboard-header p {
+    font-size: 16px;
+    opacity: 0.9;
+}
+
+
+/* ==========================================
+   DASHBOARD CONTAINER
+========================================== */
+
+.dashboard-container {
+    width: 92%;
+    max-width: 1400px;
+    margin: 30px auto;
+}
+
+
+/* ==========================================
+   INFORMATION BAR
+========================================== */
+
+.dashboard-info {
+    display: grid;
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 20px;
+
+    background: white;
+
+    padding: 22px;
+
+    border-radius: 12px;
+
+    box-shadow:
+        0 3px 12px
+        rgba(0, 0, 0, 0.08);
+
+    margin-bottom: 30px;
+}
+
+.dashboard-info > div {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.info-label {
+    font-size: 13px;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.dashboard-info strong {
+    font-size: 18px;
+    color: #111827;
+}
+
+.status-success {
+    color: #059669 !important;
+}
+
+
+/* ==========================================
+   SECTION TITLE
+========================================== */
+
+.section-title {
+    margin-bottom: 18px;
+}
+
+.section-title h2 {
+    color: #111827;
+    margin-bottom: 5px;
+}
+
+.section-title p {
+    color: #6b7280;
+}
+
+
+/* ==========================================
+   METRIC GRID
+========================================== */
+
+.metric-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(5, 1fr);
+
+    gap: 18px;
+
+    margin-bottom: 30px;
+}
+
+
+.metric-card {
+    background: white;
+
+    border-radius: 12px;
+
+    padding: 22px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 15px;
+
+    box-shadow:
+        0 3px 12px
+        rgba(0, 0, 0, 0.08);
+
+    border-left: 4px solid #2563eb;
+}
+
+
+.metric-label {
+    display: block;
+
+    font-size: 13px;
+
+    color: #6b7280;
+
+    margin-bottom: 7px;
+}
+
+
+.metric-value {
+    font-size: 25px;
+
+    font-weight: bold;
+
+    color: #111827;
+}
+
+
+.metric-value small {
+    font-size: 14px;
+
+    color: #6b7280;
+
+    font-weight: normal;
+}
+
+
+/* ==========================================
+   METRIC ICONS
+========================================== */
+
+.metric-icon {
+    min-width: 45px;
+
+    height: 45px;
+
+    border-radius: 10px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 22px;
+
+    font-weight: bold;
+}
+
+.blue-icon {
+    background: #dbeafe;
+    color: #2563eb;
+}
+
+.purple-icon {
+    background: #ede9fe;
+    color: #7c3aed;
+}
+
+.red-icon {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+.orange-icon {
+    background: #ffedd5;
+    color: #ea580c;
+}
+
+.green-icon {
+    background: #dcfce7;
+    color: #16a34a;
+}
+
+
+/* ==========================================
+   RISK CARD BORDERS
+========================================== */
+
+.high-card {
+    border-left-color: #dc2626;
+}
+
+.medium-card {
+    border-left-color: #ea580c;
+}
+
+.low-card {
+    border-left-color: #16a34a;
+}
+
+
+/* ==========================================
+   MAP + RISK DISTRIBUTION
+========================================== */
+
+.dashboard-content {
+    display: grid;
+
+    grid-template-columns:
+        2fr 1fr;
+
+    gap: 25px;
+
+    margin-bottom: 30px;
+}
+
+
+/* ==========================================
+   MAP CARD
+========================================== */
+
+.dashboard-map-card,
+.risk-card {
+    background: white;
+
+    border-radius: 12px;
+
+    padding: 25px;
+
+    box-shadow:
+        0 3px 12px
+        rgba(0, 0, 0, 0.08);
+}
+
+
+.card-heading h2,
+.risk-card h2 {
+    color: #111827;
+
+    margin-bottom: 5px;
+}
+
+.card-heading p,
+.card-description {
+    color: #6b7280;
+
+    font-size: 14px;
+}
+
+
+/* ==========================================
+   MAP LEGEND
+========================================== */
+
+.map-legend {
+    display: flex;
+
+    gap: 20px;
+
+    margin: 18px 0;
+
+    flex-wrap: wrap;
+}
+
+.map-legend span {
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    font-size: 14px;
+
+    font-weight: bold;
+}
+
+.legend-dot {
+    width: 12px;
+
+    height: 12px;
+
+    border-radius: 50%;
+
+    display: inline-block;
+}
+
+.green-dot {
+    background: green;
+}
+
+.orange-dot {
+    background: orange;
+}
+
+.red-dot {
+    background: red;
+}
+
+
+/* ==========================================
+   MAP
+========================================== */
+
+#map {
+    width: 100%;
+
+    height: 520px;
+
+    border-radius: 10px;
+
+    overflow: hidden;
+}
+
+.no-data {
+    padding: 30px;
+
+    text-align: center;
+
+    color: #6b7280;
+}
+
+
+/* ==========================================
+   RISK DISTRIBUTION
+========================================== */
+
+.risk-row {
+    margin-top: 25px;
+}
+
+
+.risk-row-header {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 8px;
+
+    font-size: 14px;
+}
+
+
+.risk-row-header strong {
+    color: #111827;
+}
+
+
+/* ==========================================
+   PROGRESS BAR
+========================================== */
+
+.progress {
+    width: 100%;
+
+    height: 12px;
+
+    background: #e5e7eb;
+
+    border-radius: 20px;
+
+    overflow: hidden;
+}
+
+
+.progress > div {
+    height: 100%;
+
+    width: 0%;
+
+    border-radius: 20px;
+
+    transition:
+        width 0.8s ease;
+}
+
+
+.progress-high {
+    background: #dc2626;
+}
+
+.progress-medium {
+    background: #f97316;
+}
+
+.progress-low {
+    background: #16a34a;
+}
+
+
+.risk-row small {
+    display: block;
+
+    margin-top: 6px;
+
+    color: #6b7280;
+}
+
+
+/* ==========================================
+   DECISION SUPPORT BOX
+========================================== */
+
+.decision-box {
+    margin-top: 35px;
+
+    padding: 20px;
+
+    background: #eff6ff;
+
+    border-left: 4px solid #2563eb;
+
+    border-radius: 8px;
+}
+
+
+.decision-box h3 {
+    color: #1e3a8a;
+
+    margin-bottom: 10px;
+}
+
+
+.decision-box p {
+    color: #374151;
+
+    font-size: 14px;
+
+    line-height: 1.6;
+}
+
+
+.decision-box ul {
+    margin-top: 12px;
+
+    padding-left: 20px;
+
+    color: #374151;
+
+    font-size: 14px;
+
+    line-height: 1.8;
+}
+
+
+/* ==========================================
+   DASHBOARD BUTTONS
+========================================== */
+
+.dashboard-actions {
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: 15px;
+
+    margin-bottom: 30px;
+}
+
+
+.primary-button,
+.secondary-button {
+    border: none;
+
+    border-radius: 8px;
+
+    padding: 13px 22px;
+
+    font-size: 15px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+
+.primary-button {
+    background: #2563eb;
+
+    color: white;
+}
+
+
+.primary-button:hover {
+    background: #1d4ed8;
+}
+
+
+.secondary-button {
+    background: white;
+
+    color: #1e3a8a;
+
+    border: 1px solid #2563eb;
+}
+
+
+.secondary-button:hover {
+    background: #eff6ff;
+}
+
+
+/* ==========================================
+   RESPONSIVE DESIGN
+========================================== */
+
+@media (max-width: 1100px) {
+
+    .metric-grid {
+        grid-template-columns:
+            repeat(3, 1fr);
+    }
+
+    .dashboard-content {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+@media (max-width: 700px) {
+
+    .dashboard-info {
+        grid-template-columns: 1fr;
+    }
+
+    .metric-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-actions {
+        flex-direction: column;
+    }
+
+    .primary-button,
+    .secondary-button {
+        width: 100%;
+    }
+
+    #map {
+        height: 400px;
+    }
+
 }

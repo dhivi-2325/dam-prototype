@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Flood Risk Dashboard</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+    <!-- Leaflet CSS -->
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    >
+
+</head>
+
+
+<body>
+
+
+<!-- ==========================================
+     HEADER
+=========================================== -->
+
+<header class="dashboard-header">
+
+    <div>
+
+        <h1>
+            Flood Risk Dashboard
+        </h1>
+
+        <p>
+            AI-Enabled Dam Break Inundation Modelling
+            & Decision Support System
+        </p>
+
+    </div>
+
+</header>
+
+
+
+<main class="dashboard-container">
+
+
+    <!-- ======================================
+         TOP INFORMATION
+    ======================================= -->
+
+    <section class="dashboard-info">
+
+        <div>
+
+            <span class="info-label">
+                Scenario
+            </span>
+
+            <strong id="scenario">
+                -
+            </strong>
+
+        </div>
+
+
+        <div>
+
+            <span class="info-label">
+                Location
+            </span>
+
+            <strong id="location">
+                -
+            </strong>
+
+        </div>
+
+
+        <div>
+
+            <span class="info-label">
+                Status
+            </span>
+
+            <strong class="status-success">
+                ● Simulation Completed
+            </strong>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ======================================
+         KEY METRICS
+    ======================================= -->
+
+    <section>
+
+        <div class="section-title">
+
+            <div>
+
+                <h2>
+                    Flood Risk Overview
+                </h2>
+
+                <p>
+                    Summary of the simulated inundation
+                    scenario
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="metric-grid">
+
+
+            <!-- MAXIMUM DEPTH -->
+
+            <div class="metric-card">
+
+                <div class="metric-icon blue-icon">
+                    ≋
+                </div>
+
+                <div>
+
+                    <span class="metric-label">
+                        Maximum Flood Depth
+                    </span>
+
+                    <div class="metric-value">
+
+                        <span id="max_depth">
+                            -
+                        </span>
+
+                        <small>
+                            m
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- TOTAL AREA -->
+
+            <div class="metric-card">
+
+                <div class="metric-icon purple-icon">
+                    ▧
+                </div>
+
+                <div>
+
+                    <span class="metric-label">
+                        Total Inundated Area
+                    </span>
+
+                    <div class="metric-value">
+
+                        <span id="area">
+                            -
+                        </span>
+
+                        <small>
+                            m²
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- HIGH RISK -->
+
+            <div class="metric-card high-card">
+
+                <div class="metric-icon red-icon">
+                    !
+                </div>
+
+                <div>
+
+                    <span class="metric-label">
+                        High Risk Area
+                    </span>
+
+                    <div class="metric-value">
+
+                        <span id="high_area">
+                            -
+                        </span>
+
+                        <small>
+                            m²
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- MEDIUM RISK -->
+
+            <div class="metric-card medium-card">
+
+                <div class="metric-icon orange-icon">
+                    !
+                </div>
+
+                <div>
+
+                    <span class="metric-label">
+                        Medium Risk Area
+                    </span>
+
+                    <div class="metric-value">
+
+                        <span id="medium_area">
+                            -
+                        </span>
+
+                        <small>
+                            m²
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- LOW RISK -->
+
+            <div class="metric-card low-card">
+
+                <div class="metric-icon green-icon">
+                    ✓
+                </div>
+
+                <div>
+
+                    <span class="metric-label">
+                        Low Risk Area
+                    </span>
+
+                    <div class="metric-value">
+
+                        <span id="low_area">
+                            -
+                        </span>
+
+                        <small>
+                            m²
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ======================================
+         MAP + RISK DISTRIBUTION
+    ======================================= -->
+
+    <section class="dashboard-content">
+
+
+        <!-- ==================================
+             MAP
+        =================================== -->
+
+        <div class="dashboard-map-card">
+
+            <div class="card-heading">
+
+                <div>
+
+                    <h2>
+                        Flood Risk Map
+                    </h2>
+
+                    <p>
+                        Spatial visualization of
+                        simulated inundation
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- LEGEND -->
+
+            <div class="map-legend">
+
+                <span>
+                    <i class="legend-dot green-dot"></i>
+                    Low
+                </span>
+
+                <span>
+                    <i class="legend-dot orange-dot"></i>
+                    Medium
+                </span>
+
+                <span>
+                    <i class="legend-dot red-dot"></i>
+                    High
+                </span>
+
+            </div>
+
+
+            <div id="map"></div>
+
+
+        </div>
+
+
+
+        <!-- ==================================
+             RISK DISTRIBUTION
+        =================================== -->
+
+        <div class="risk-card">
+
+            <h2>
+                Risk Distribution
+            </h2>
+
+            <p class="card-description">
+                Distribution of inundated area
+                by risk category
+            </p>
+
+
+
+            <!-- HIGH -->
+
+            <div class="risk-row">
+
+                <div class="risk-row-header">
+
+                    <span>
+                        🔴 High Risk
+                    </span>
+
+                    <strong id="high_percent">
+                        0%
+                    </strong>
+
+                </div>
+
+                <div class="progress">
+
+                    <div
+                        id="high_bar"
+                        class="progress-high"
+                    ></div>
+
+                </div>
+
+                <small id="high_area_summary">
+                    0 m²
+                </small>
+
+            </div>
+
+
+
+            <!-- MEDIUM -->
+
+            <div class="risk-row">
+
+                <div class="risk-row-header">
+
+                    <span>
+                        🟠 Medium Risk
+                    </span>
+
+                    <strong id="medium_percent">
+                        0%
+                    </strong>
+
+                </div>
+
+                <div class="progress">
+
+                    <div
+                        id="medium_bar"
+                        class="progress-medium"
+                    ></div>
+
+                </div>
+
+                <small id="medium_area_summary">
+                    0 m²
+                </small>
+
+            </div>
+
+
+
+            <!-- LOW -->
+
+            <div class="risk-row">
+
+                <div class="risk-row-header">
+
+                    <span>
+                        🟢 Low Risk
+                    </span>
+
+                    <strong id="low_percent">
+                        0%
+                    </strong>
+
+                </div>
+
+                <div class="progress">
+
+                    <div
+                        id="low_bar"
+                        class="progress-low"
+                    ></div>
+
+                </div>
+
+                <small id="low_area_summary">
+                    0 m²
+                </small>
+
+            </div>
+
+
+
+            <!-- INFORMATION -->
+
+            <div class="decision-box">
+
+                <h3>
+                    Decision Support
+                </h3>
+
+                <p>
+                    The map highlights areas according
+                    to simulated flood depth and risk
+                    classification.
+                </p>
+
+                <ul>
+
+                    <li>
+                        High-risk areas require priority
+                        attention.
+                    </li>
+
+                    <li>
+                        Medium-risk areas require
+                        monitoring.
+                    </li>
+
+                    <li>
+                        Low-risk areas indicate lower
+                        simulated inundation depth.
+                    </li>
+
+                </ul>
+
+            </div>
+
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- ======================================
+         ACTIONS
+    ======================================= -->
+
+    <section class="dashboard-actions">
+
+        <button
+            class="secondary-button"
+            onclick="runAnotherSimulation()"
+        >
+            ↻ Run Another Simulation
+        </button>
+
+
+        <button
+            class="primary-button"
+            onclick="goHome()"
+        >
+            ← Back to Home
+        </button>
+
+    </section>
+
+
+</main>
+
+
+
+<!-- ==========================================
+     LEAFLET JAVASCRIPT
+=========================================== -->
+
+<script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+</script>
+
+
+
+<script>
+
+
+// ==========================================
+// GET STORED RESULT
+// ==========================================
+
+const storedResult =
+    sessionStorage.getItem(
+        "simulationResult"
+    );
+
+
+// ==========================================
+// CHECK RESULT
+// ==========================================
+
+if (!storedResult) {
+
+    alert(
+        "No simulation result found. Please run a simulation first."
+    );
+
+    window.location.href = "/";
+
+}
+else {
+
+    const result =
+        JSON.parse(storedResult);
+
+
+    // ======================================
+    // BASIC INFORMATION
+    // ======================================
+
+    document.getElementById(
+        "scenario"
+    ).innerText =
+        result.scenario || "-";
+
+
+    document.getElementById(
+        "location"
+    ).innerText =
+        result.location_name || "-";
+
+
+    // ======================================
+    // MAIN METRICS
+    // ======================================
+
+    document.getElementById(
+        "max_depth"
+    ).innerText =
+        result.max_depth ?? "-";
+
+
+    document.getElementById(
+        "area"
+    ).innerText =
+        result.inundated_area ?? "-";
+
+
+    document.getElementById(
+        "high_area"
+    ).innerText =
+        result.high_risk_area ?? 0;
+
+
+    document.getElementById(
+        "medium_area"
+    ).innerText =
+        result.medium_risk_area ?? 0;
+
+
+    document.getElementById(
+        "low_area"
+    ).innerText =
+        result.low_risk_area ?? 0;
+
+
+    // ======================================
+    // RISK AREAS
+    // ======================================
+
+    const highArea =
+        Number(
+            result.high_risk_area || 0
+        );
+
+
+    const mediumArea =
+        Number(
+            result.medium_risk_area || 0
+        );
+
+
+    const lowArea =
+        Number(
+            result.low_risk_area || 0
+        );
+
+
+    const totalArea =
+        highArea
+        +
+        mediumArea
+        +
+        lowArea;
+
+
+    // ======================================
+    // CALCULATE PERCENTAGES
+    // ======================================
+
+    let highPercent = 0;
+
+    let mediumPercent = 0;
+
+    let lowPercent = 0;
+
+
+    if (totalArea > 0) {
+
+        highPercent =
+            (highArea / totalArea) * 100;
+
+        mediumPercent =
+            (mediumArea / totalArea) * 100;
+
+        lowPercent =
+            (lowArea / totalArea) * 100;
+
+    }
+
+
+    // ======================================
+    // DISPLAY PERCENTAGES
+    // ======================================
+
+    document.getElementById(
+        "high_percent"
+    ).innerText =
+        highPercent.toFixed(1) + "%";
+
+
+    document.getElementById(
+        "medium_percent"
+    ).innerText =
+        mediumPercent.toFixed(1) + "%";
+
+
+    document.getElementById(
+        "low_percent"
+    ).innerText =
+        lowPercent.toFixed(1) + "%";
+
+
+    // ======================================
+    // PROGRESS BARS
+    // ======================================
+
+    document.getElementById(
+        "high_bar"
+    ).style.width =
+        highPercent + "%";
+
+
+    document.getElementById(
+        "medium_bar"
+    ).style.width =
+        mediumPercent + "%";
+
+
+    document.getElementById(
+        "low_bar"
+    ).style.width =
+        lowPercent + "%";
+
+
+    // ======================================
+    // AREA SUMMARY
+    // ======================================
+
+    document.getElementById(
+        "high_area_summary"
+    ).innerText =
+        highArea + " m²";
+
+
+    document.getElementById(
+        "medium_area_summary"
+    ).innerText =
+        mediumArea + " m²";
+
+
+    document.getElementById(
+        "low_area_summary"
+    ).innerText =
+        lowArea + " m²";
+
+
+    // ======================================
+    // CREATE MAP
+    // ======================================
+
+    createMap(
+        result.points || []
+    );
+
+}
+
+
+
+// ==========================================
+// CREATE FLOOD MAP
+// ==========================================
+
+function createMap(points) {
+
+
+    const mapElement =
+        document.getElementById(
+            "map"
+        );
+
+
+    // ======================================
+    // NO DATA
+    // ======================================
+
+    if (
+        !points ||
+        points.length === 0
+    ) {
+
+        mapElement.innerHTML =
+            "<p class='no-data'>No significant inundation detected.</p>";
+
+        return;
+
+    }
+
+
+    // ======================================
+    // MAP CENTER
+    // ======================================
+
+    const centerLat =
+        points[0].lat;
+
+
+    const centerLon =
+        points[0].lon;
+
+
+    // ======================================
+    // CREATE MAP
+    // ======================================
+
+    const map =
+        L.map("map")
+        .setView(
+            [
+                centerLat,
+                centerLon
+            ],
+            13
+        );
+
+
+    // ======================================
+    // OPENSTREETMAP
+    // ======================================
+
+    L.tileLayer(
+
+        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+
+        {
+
+            attribution:
+                "&copy; OpenStreetMap contributors"
+
+        }
+
+    ).addTo(map);
+
+
+    // ======================================
+    // ADD FLOOD POINTS
+    // ======================================
+
+    points.forEach(
+        function(point) {
+
+
+            let color =
+                "green";
+
+
+            let riskName =
+                "Low";
+
+
+            // LOW
+
+            if (
+                point.risk === 1
+            ) {
+
+                color =
+                    "green";
+
+                riskName =
+                    "Low";
+
+            }
+
+
+            // MEDIUM
+
+            else if (
+                point.risk === 2
+            ) {
+
+                color =
+                    "orange";
+
+                riskName =
+                    "Medium";
+
+            }
+
+
+            // HIGH
+
+            else if (
+                point.risk === 3
+            ) {
+
+                color =
+                    "red";
+
+                riskName =
+                    "High";
+
+            }
+
+
+            // ==================================
+            // MARKER
+            // ==================================
+
+            L.circleMarker(
+
+                [
+                    point.lat,
+                    point.lon
+                ],
+
+                {
+
+                    radius: 6,
+
+                    color:
+                        color,
+
+                    fillColor:
+                        color,
+
+                    fillOpacity:
+                        0.75,
+
+                    weight: 1
+
+                }
+
+            )
+
+
+            // ==================================
+            // POPUP
+            // ==================================
+
+            .bindPopup(
+
+                "<b>Flood Depth:</b> "
+                +
+                point.depth
+                +
+                " m"
+                +
+                "<br>"
+                +
+                "<b>Risk Level:</b> "
+                +
+                riskName
+
+            )
+
+
+            .addTo(map);
+
+
+        }
+    );
+
+}
+
+
+
+// ==========================================
+// RUN ANOTHER SIMULATION
+// ==========================================
+
+function runAnotherSimulation() {
+
+    sessionStorage.removeItem(
+        "simulationResult"
+    );
+
+    window.location.href =
+        "/";
+
+}
+
+
+
+// ==========================================
+// BACK TO HOME
+// ==========================================
+
+function goHome() {
+
+    sessionStorage.removeItem(
+        "simulationResult"
+    );
+
+    window.location.href =
+        "/";
+
+}
+
+
+</script>
+
+
+</body>
+
+</html>

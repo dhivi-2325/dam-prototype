@@ -1,27 +1,20 @@
+// ==========================================
+// RUN SIMULATION
+// ==========================================
+
 async function runSimulation() {
 
     const damHeight =
-        document.getElementById(
-            "dam_height"
-        ).value;
-
+        document.getElementById("dam_height").value;
 
     const waterLevel =
-        document.getElementById(
-            "water_level"
-        ).value;
-
+        document.getElementById("water_level").value;
 
     const breachWidth =
-        document.getElementById(
-            "breach_width"
-        ).value;
-
+        document.getElementById("breach_width").value;
 
     const breachTime =
-        document.getElementById(
-            "breach_time"
-        ).value;
+        document.getElementById("breach_time").value;
 
 
     try {
@@ -39,6 +32,13 @@ async function runSimulation() {
 
                 body: JSON.stringify({
 
+                    scenario: "dam_breach",
+
+                    dam_name:
+                        document.getElementById(
+                            "dam_name"
+                        ).value,
+
                     dam_height:
                         damHeight,
 
@@ -50,7 +50,9 @@ async function runSimulation() {
 
                     breach_time:
                         breachTime
+
                 })
+
             }
         );
 
@@ -59,54 +61,44 @@ async function runSimulation() {
             await response.json();
 
 
+        // ======================================
+        // CHECK FOR ERROR
+        // ======================================
+
         if (!data.success) {
 
             alert(data.error);
 
             return;
+
         }
 
+
+        // ======================================
+        // GET RESULT
+        // ======================================
 
         const result =
             data.result;
 
 
-        document.getElementById(
-            "max_depth"
-        ).innerText =
-            result.max_depth;
+        // ======================================
+        // SAVE RESULT FOR DASHBOARD
+        // ======================================
 
-
-        document.getElementById(
-            "area"
-        ).innerText =
-            result.inundated_area;
-
-
-        let riskStatus = "Low";
-
-
-        if (result.max_depth > 1.5) {
-
-            riskStatus = "Medium";
-        }
-
-
-        if (result.max_depth > 3) {
-
-            riskStatus = "High";
-        }
-
-
-        document.getElementById(
-            "risk"
-        ).innerText =
-            riskStatus;
-
-
-        createMap(
-            result.points
+        sessionStorage.setItem(
+            "simulationResult",
+            JSON.stringify(result)
         );
+
+
+        // ======================================
+        // OPEN DASHBOARD
+        // ======================================
+
+        window.location.href =
+            "/dashboard";
+
 
     }
 
@@ -117,38 +109,58 @@ async function runSimulation() {
         );
 
         console.error(error);
+
     }
+
 }
 
 
+// ==========================================
+// CREATE FLOOD RISK MAP
+// ==========================================
 
 function createMap(points) {
 
     const mapElement =
-        document.getElementById(
-            "map"
-        );
+        document.getElementById("map");
 
+
+    // Clear old map
 
     mapElement.innerHTML = "";
 
 
-    if (points.length === 0) {
+    // ======================================
+    // NO FLOOD DATA
+    // ======================================
+
+    if (
+        !points ||
+        points.length === 0
+    ) {
 
         mapElement.innerHTML =
             "<p>No significant inundation detected.</p>";
 
         return;
+
     }
 
+
+    // ======================================
+    // MAP CENTER
+    // ======================================
 
     const centerLat =
         points[0].lat;
 
-
     const centerLon =
         points[0].lon;
 
+
+    // ======================================
+    // CREATE MAP
+    // ======================================
 
     const map =
         L.map("map")
@@ -161,6 +173,10 @@ function createMap(points) {
         );
 
 
+    // ======================================
+    // OPENSTREETMAP
+    // ======================================
+
     L.tileLayer(
         "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
         {
@@ -169,15 +185,35 @@ function createMap(points) {
                 "&copy; OpenStreetMap contributors"
 
         }
+
     ).addTo(map);
 
+
+    // ======================================
+    // ADD FLOOD POINTS
+    // ======================================
 
     points.forEach(
         point => {
 
-            let color =
-                "blue";
 
+            let color =
+                "green";
+
+
+            // LOW RISK
+
+            if (
+                point.risk === 1
+            ) {
+
+                color =
+                    "green";
+
+            }
+
+
+            // MEDIUM RISK
 
             if (
                 point.risk === 2
@@ -185,8 +221,11 @@ function createMap(points) {
 
                 color =
                     "orange";
+
             }
 
+
+            // HIGH RISK
 
             if (
                 point.risk === 3
@@ -194,8 +233,13 @@ function createMap(points) {
 
                 color =
                     "red";
+
             }
 
+
+            // ==================================
+            // CREATE CIRCLE
+            // ==================================
 
             L.circleMarker(
 
@@ -208,29 +252,70 @@ function createMap(points) {
 
                     radius: 6,
 
-                    color: color,
+                    color:
+                        color,
 
                     fillColor:
                         color,
 
                     fillOpacity:
                         0.7
+
                 }
 
             )
 
+
+            // ==================================
+            // POPUP
+            // ==================================
+
             .bindPopup(
 
-                "Flood Depth: "
+                "<b>Flood Depth:</b> "
                 + point.depth
                 + " m<br>"
-                + "Risk Level: "
-                + point.risk
+
+                + "<b>Risk Level:</b> "
+                + getRiskName(
+                    point.risk
+                )
 
             )
+
 
             .addTo(map);
 
         }
     );
+
+}
+
+
+// ==========================================
+// RISK NAME
+// ==========================================
+
+function getRiskName(risk) {
+
+    if (risk === 3) {
+
+        return "High";
+
+    }
+
+    if (risk === 2) {
+
+        return "Medium";
+
+    }
+
+    if (risk === 1) {
+
+        return "Low";
+
+    }
+
+    return "No Risk";
+
 }

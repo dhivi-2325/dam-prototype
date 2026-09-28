@@ -1,217 +1,105 @@
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <title>Dam Break Inundation Modeling using HydroDynamic Modelling</title>
 
-    <title>
-        Dam Break Decision Support System
-    </title>
-
-    <link
-        rel="stylesheet"
-        href="{{ url_for(
-            'static',
-            filename='css/style.css'
-        ) }}"
-    >
-
-    <link
-        rel="stylesheet"
-        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    >
-
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
 </head>
-
 
 <body>
 
+    <header>
 
-<header>
+        <h1>Dam Break Inundation Modeling using HydroDynamic Modelling</h1>
 
-    <h1>
-        AI-Enabled Dam Break
-    </h1>
+        <p>
+            Inundation Modelling & Decision Support System
+        </p>
 
-    <p>
-        Inundation Modelling &
-        Decision Support System
-    </p>
-
-</header>
+    </header>
 
 
-<div class="container">
+    <main class="home-container">
+
+        <div class="welcome-card">
+
+            <h2>Select Hazard Scenario</h2>
+
+            <p class="description">
+                Select the type of flood scenario you want to simulate.
+            </p>
 
 
-    <!-- INPUT SECTION -->
-
-    <section class="input-card">
-
-        <h2>
-            Dam & Breach Parameters
-        </h2>
+            <label for="scenario">
+                Scenario Type
+            </label>
 
 
-        <label>
-            Dam Height (m)
-        </label>
+            <select id="scenario">
 
-        <input
-            type="number"
-            id="dam_height"
-            value="30"
-        >
+                <option value="">
+                    -- Select Scenario --
+                </option>
 
+                <!-- Display name: Dam Break -->
+                <!-- Keep value="dam_breach" for backend compatibility -->
+                <option value="dam_breach">
+                    Dam Break
+                </option>
 
-        <label>
-            Water Level (m)
-        </label>
+                <option value="natural_outbreak">
+                    Natural Outbreak / Lake Outburst
+                </option>
 
-        <input
-            type="number"
-            id="water_level"
-            value="25"
-        >
+            </select>
 
 
-        <label>
-            Breach Width (m)
-        </label>
-
-        <input
-            type="number"
-            id="breach_width"
-            value="15"
-        >
-
-
-        <label>
-            Breach Formation Time (minutes)
-        </label>
-
-        <input
-            type="number"
-            id="breach_time"
-            value="30"
-        >
-
-
-        <button
-            onclick="runSimulation()"
-        >
-
-            Run Flood Simulation
-
-        </button>
-
-    </section>
-
-
-
-    <!-- RESULTS -->
-
-    <section class="results">
-
-        <h2>
-            Simulation Results
-        </h2>
-
-
-        <div class="cards">
-
-
-            <div class="card">
-
-                <h3>
-                    Maximum Depth
-                </h3>
-
-                <p id="max_depth">
-                    --
-                </p>
-
-                <span>
-                    meters
-                </span>
-
-            </div>
-
-
-            <div class="card">
-
-                <h3>
-                    Inundated Area
-                </h3>
-
-                <p id="area">
-                    --
-                </p>
-
-                <span>
-                    m²
-                </span>
-
-            </div>
-
-
-            <div class="card">
-
-                <h3>
-                    Risk Status
-                </h3>
-
-                <p id="risk">
-                    --
-                </p>
-
-            </div>
-
+            <button onclick="continueScenario()">
+                Continue
+            </button>
 
         </div>
 
-    </section>
+    </main>
 
 
+    <script>
 
-    <!-- MAP -->
+        function continueScenario() {
 
-    <section class="map-section">
-
-        <h2>
-            Flood Inundation Map
-        </h2>
-
-        <div id="map"></div>
-
-    </section>
+            const scenario =
+                document.getElementById("scenario").value;
 
 
-</div>
+            if (scenario === "") {
+
+                alert("Please select a scenario.");
+
+                return;
+            }
 
 
+            if (scenario === "dam_breach") {
 
-<script
-    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
->
-</script>
+                window.location.href = "/dam-breach";
+
+            }
 
 
-<script
-    src="{{ url_for(
-        'static',
-        filename='js/script.js'
-    ) }}"
->
-</script>
+            else if (scenario === "natural_outbreak") {
 
+                window.location.href = "/natural-outbreak";
+
+            }
+
+        }
+
+    </script>
 
 </body>
 
